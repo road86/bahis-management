@@ -1,0 +1,21 @@
+name: lint and format
+on:
+  pull_request:
+    types: [opened, edited, synchronize, auto_merge_enabled, reopened]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: black and flake8
+        uses: 654wak654/python-lint@1.6.2
+        with:
+          use-pylint: false
+          use-pycodestyle: false
+          use-flake8: true
+          use-black: true
+          use-mypy: false
+          use-isort: true

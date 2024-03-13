@@ -1,0 +1,11 @@
+{%extends 'update_form.html'%}
+
+{% block content_title %}
+Update Desktop App Module
+{% endblock content_title %}
+
+{% block extra_options %}
+{% if allow_workflows %}
+    <a class="btn tooltipped" data-tooltip="See workflows for this list" href="/desk/workflows/{{ object.form }}/">Workflows</a>
+{% endif %}
+{% endblock extra_options%}
