@@ -1,0 +1,27 @@
+{% extends 'list.html' %}
+
+{% block content_title %}
+Desktop App Workflows
+{% endblock content_title %}
+
+{% block create_button %}
+<a class="btn-floating btn-large waves-effect waves-light tooltipped" data-tooltip="Create" href="{% url 'desk:workflows_create' %}"><i class="material-symbols-outlined">add</i></a>
+{% endblock create_button %}
+
+
+
+{% block table_headers %}
+    <th>ID</th>
+    <th>Title</th>
+    <th>Source Form</th>
+    <th>Destination Form</th>
+    <th>Is Active?</th>
+{% endblock table_headers %}
+
+{% block table_rows %}
+    <td>{{ module.id }}</td>
+    <td>{{ module.title }}</td>
+    <td>{{ module.source_form }}</td>
+    <td>{{ module.destination_form }}</td>
+    <td><label for="checkbox-for-{{ module.id }}"><input id="checkbox-for-{{ module.id }}" class="filled-in" type="checkbox" {% if module.is_active %} checked {% endif %} disabled/><span></span></label></td>
+{% endblock table_rows %}

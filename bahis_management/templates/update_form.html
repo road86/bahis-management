@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load materializecss %}
+
+{% block content %}
+
+<h1>
+{% block content_title %}
+Template Update View
+{% endblock content_title %}
+</h1>
+
+<form method="post">{% csrf_token %}
+    {{ form | materializecss }}
+    <div class="row">
+        <div class="col s6 left-align">
+            {% block extra_options %}
+            {% endblock extra_options %}
+        </div>
+        <div class="col s6 right-align">
+            <input class="btn" type="submit" value="Overwrite existing module" />
+            {% block cancel_button %}
+            <a class="btn tooltipped" data-tooltip="Go back" href="{% url request.resolver_match.app_name|add:':list' %}">Cancel</a>
+            {% endblock cancel_button %}
+        </div>
+    </div>
+</form>
+
+{% endblock content %}
+
+{% block inline_javascript %}
+    <script>
+        $(document).ready(function(){
+            // Initialize materialize form selects
+            $('select').formSelect();
+            $('.tooltipped').tooltip({enterDelay: 0, exitDelay: 0, inDuration: 100, outDuration: 100, margin: 2});
+        });
+    </script>
+{% endblock inline_javascript %}

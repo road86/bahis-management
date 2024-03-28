@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>
+{% block content_title %}
+Template Delete View
+{% endblock content_title %}
+</h1>
+
+<form method="post">{% csrf_token %}
+    <p>Are you sure you want to delete "{{ object }}"?</p>
+    {{ form }}
+    <div class="col s12 right-align">
+        <input class="btn" type="submit" value="Confirm delete" />
+        <a class="btn tooltipped" data-tooltip="Go back" href="{{ request.META.HTTP_REFERER }}">Cancel</a>
+    </div>
+</form>
+
+{% endblock content %}
+
+{% block inline_javascript %}
+    <script>
+        $(document).ready(function(){
+            // Initialize materialize form selects
+            $('.tooltipped').tooltip({enterDelay: 0, exitDelay: 0, inDuration: 100, outDuration: 100, margin: 2});
+        });
+    </script>
+{% endblock inline_javascript %}

@@ -1,0 +1,28 @@
+{% extends 'list.html' %}
+
+{% block content_title %}
+Adminstrative Regions
+{% endblock content_title %}
+
+{% block table_headers %}
+    <th>ID</th>
+    <th>Title</th>
+    <th>Level</th>
+    <th>Parent Region</th>
+{% endblock table_headers %}
+
+{% block table_rows %}
+    <td>{{ module.id }}</td>
+    <td>{{ module.title }}</td>
+    <td>{{ module.administrative_region_level }}</td>
+    <td>{{ module.parent_administrative_region }}</td>
+{% endblock table_rows %}
+
+{% block update_delete_buttons %}
+<a class="tooltipped" data-tooltip="Edit" href="{% url request.resolver_match.app_name|add:':adminstrative_region_update' module.id %}"><i class="material-symbols-outlined">edit</i></a>
+<a class="tooltipped" data-tooltip="Delete" href="{% url request.resolver_match.app_name|add:':adminstrative_region_delete' module.id %}"><i class="material-symbols-outlined">delete</i></a>
+{% endblock update_delete_buttons %}
+
+{% block cancel_button %}
+<a class="btn tooltipped" data-tooltip="Go back" href="{% url request.resolver_match.app_name|add:':index' %}">Cancel</a>
+{% endblock cancel_button %}

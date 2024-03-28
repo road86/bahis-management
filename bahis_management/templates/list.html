@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>
+{% block content_title %}
+Template List View
+{% endblock content_title %}
+</h1>
+
+{% block content_into %}
+{% endblock content_into %}
+
+{% block content_list %}
+<div class="row">
+    <div class="col s12 right-align">
+        {% block create_button %}
+        <a class="btn-floating btn-large waves-effect waves-light tooltipped" data-tooltip="Create" href="{% url request.resolver_match.app_name|add:':create' %}"><i class="material-symbols-outlined">add</i></a>
+        {% endblock create_button %}
+    </div>
+</div>
+
+{% block filter %}
+{% if filter %}
+<ul class="collapsible">
+    <li class="{% if query %}active{% endif %}">
+        <div class="collapsible-header tooltipped" data-tooltip="Search for specific data entries">
+            <i class="material-symbols-outlined">search</i> Filter
+        </div>
+        <div class="collapsible-body">
+            <form method="get">
+                {{ filter.form.as_p }}
+                <input class="btn waves-effect" type="submit" />
+            </form>
+        </div>
+    </li>
+</ul>
+{% endif %}
+{% endblock filter %}
+
+{% if object_list %}
+<table class="striped centered responsive-table">
+    <thead>
+        <tr>
+            {% block table_headers %}
+            <th>Table headers go here</th>
+            {% endblock table_headers %}
+            <th></th>{# for the update and delete buttons #}
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for module in object_list %}
+            <tr>
+                {% block table_rows %}
+                <td>Table data goes here</td>
+                {% endblock table_rows %}
+                <td>
+                    {% block update_delete_buttons %}
+                    <a class="tooltipped" data-tooltip="Edit" href="{% url request.resolver_match.app_name|add:':update' module.id %}"><i class="material-symbols-outlined">edit</i></a>
+                    <a class="tooltipped" data-tooltip="Delete" href="{% url request.resolver_match.app_name|add:':delete' module.id %}"><i class="material-symbols-outlined">delete</i></a>
+                    {% endblock update_delete_buttons %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="row">
+    <div class="col s12 right-align">
+        <ul class="pagination">
+            <li class="waves-effect {% if not page_obj.has_previous %}disabled{% endif %} tooltipped" data-tooltip="First page"><a href="?page=1{% for k, v in query.items %}&{{ k }}={{ v }}{% endfor %}"><i class="material-symbols-outlined">first_page</i></a></li>
+            <li class="waves-effect {% if not page_obj.has_previous %}disabled{% endif %} tooltipped" data-tooltip="Previous page"><a href="?page={% if page_obj.has_previous %}{{ page_obj.previous_page_number }}{% endif %}{% for k, v in query.items %}&{{ k }}={{ v }}{% endfor %}"><i class="material-symbols-outlined">chevron_left</i></a></li>
+            {% for page in paginator_range %}
+                <li class="waves-effect {% if page == page_obj.number %}active{% endif %}"><a href="?page={{ page }}{% for k, v in query.items %}&{{ k }}={{ v }}{% endfor %}">{{ page }}</a></li>
+            {% endfor %}
+            <li class="waves-effect {% if not page_obj.has_next %}disabled{% endif %} tooltipped" data-tooltip="Next page"><a href="?page={% if page_obj.has_next %}{{ page_obj.next_page_number }}{% endif %}{% for k, v in query.items %}&{{ k }}={{ v }}{% endfor %}"><i class="material-symbols-outlined">chevron_right</i></a></li>
+            <li class="waves-effect {% if not page_obj.has_next %}disabled{% endif %} tooltipped" data-tooltip="Last page"><a href="?page={{ page_obj.paginator.num_pages }}{% for k, v in query.items %}&{{ k }}={{ v }}{% endfor %}"><i class="material-symbols-outlined">last_page</i></a></li>
+        </ul>
+    </div>
+</div>
+{% else %}
+    <p>No data found.</p>
+{% endif %}
+{% endblock content_list %}
+
+{% block extra_options %}
+<div class="col s6 right-align">
+    {% block cancel_button %}
+    <a class="btn tooltipped" data-tooltip="Go Back" href="{{ request.META.HTTP_REFERER }}">Cancel</a>
+    {% endblock cancel_button %}
+</div>
+{% endblock extra_options %}
+
+{% endblock content %}
+
+{% block inline_javascript %}
+    <script>
+        $(document).ready(function(){
+            // Initialize materialize accordians
+            $('.collapsible').collapsible();
+            $('select').formSelect();
+            $('.tooltipped').tooltip({enterDelay: 0, exitDelay: 0, inDuration: 100, outDuration: 100, margin: 2});
+        });
+    </script>
+{% endblock inline_javascript %}

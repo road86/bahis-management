@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Taxonomies</h1>
+
+<p>These taxonomies can be used by the BAHIS Desktop App and the <kbd>cloudUser</kbd> and </kbd>search(cloudCSV)</kbd> tags in BAHIS Forms.</p>
+
+<h2>Required Taxonomies</h2>
+
+<div class="row">
+    <div class="col s12 m6">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Administrative Region Levels</span>
+          <p>This taxonomy is used to define administrative region levels, e.g. Divison, District, etc.
+            Administrative regions / units / divisions, subnational entities, or constituent states
+            (as well as many similar generic terms) are geographical areas into which a state is divided.</p>
+        </div>
+        <div class="card-action">
+          <a href="{% url 'taxonomies:adminstrative_region_level_list' %}">View Administrative Levels</a>
+        </div>
+      </div>
+    </div>
+    <div class="col s12 m6">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Administrative Regions</span>
+          <p>This taxonomy is used to define administrative regions, e.g. specifics divisons, etc.
+            Administrative regions / units / divisions, subnational entities, or constituent states
+            (as well as many similar generic terms) are geographical areas into which a state is divided.</p>
+        </div>
+        <div class="card-action">
+          <a href="{% url 'taxonomies:adminstrative_region_list' %}">View Administrative Regions</a>
+        </div>
+      </div>
+    </div>
+</div>
+
+<h2>Custom Taxonomies</h2>
+
+<div class="row">
+    <div class="col s12 right-align">
+        <a href="{% url 'taxonomies:create' %}" class="btn-floating btn-large waves-effect waves-light"><i class="material-symbols-outlined">add</i></a>
+    </div>
+</div>
+
+<div class="row">
+    {% for taxonomy in taxonomies %}
+        <div class="col s12 m6">
+        <div class="card">
+            <div class="card-content">
+            <span class="card-title">{{ taxonomy.title }}</span>
+            <p>Unique slug: {{ taxonomy.slug }}</p>
+            </div>
+            <div class="card-action">
+            <a href="{% url 'taxonomies:update' taxonomy.id %}">Upload new {{ taxonomy.title }} CSV</a>
+            </div>
+        </div>
+        </div>
+    {% endfor %}
+</div>
+
+<p>See <a href="{% url 'taxonomies:list' %}">all custom taxonomies</a>.</p>
+
+{% endblock content %}

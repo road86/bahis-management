@@ -1,0 +1,30 @@
+{% extends 'list.html' %}
+
+{% block content_title %}
+Desktop App Modules
+{% endblock content_title %}
+
+{% block table_headers %}
+    <th>ID</th>
+    <th>Module</th>
+    <th>Type</th>
+    <th>Description</th>
+    <th>Parent Module</th>
+    <th>Is Active?</th>
+{% endblock table_headers %}
+
+{% block table_rows %}
+    <td>{{ module.id }}</td>
+    <td class="valign-wrapper left-align">
+            <span class="material-symbols-outlined">{{ module.icon }}</span> &nbsp; {{ module.title }}
+    </td>
+    <td>{{ module.module_type }}</td>
+    <td>{{ module.description }}</td>
+    <td>{{ module.parent_module_id|default_if_none:"Root" }}</td>
+    <td><label for="checkbox-for-{{ module.id }}"><input id="checkbox-for-{{ module.id }}" class="filled-in" type="checkbox" {% if module.is_active %} checked {% endif %} disabled/><span></span></label></td>
+{% endblock table_rows %}
+
+{% block update_delete_buttons %}
+{{ block.super }}
+<a class="tooltipped" data-tooltip="Child modules" href="{% url request.resolver_match.app_name|add:':list' %}?title__icontains=&description__icontains=&parent_module={{ module.id }}"><i class="material-symbols-outlined">subdirectory_arrow_right</i></a>
+{% endblock update_delete_buttons %}

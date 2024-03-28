@@ -1,0 +1,16 @@
+{% extends 'create_form.html' %}
+{% load static %}
+
+{% block css %}
+    {{ block.super }}
+    <link href="{% static 'css/material-icon-picker.css' %}" rel="stylesheet" />
+{% endblock css %}
+
+{% block content_title %}
+Create Desktop App Module
+{% endblock content_title %}
+
+{% block inline_javascript %}
+    {{ block.super }}
+    <script src="{% static 'js/material-icon-picker.js' %}"></script>
+{% endblock inline_javascript %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load materializecss %}
+
+{% block content %}
+
+<h1>
+{% block content_title %}
+Template Create View
+{% endblock content_title %}
+</h1>
+
+{% block declare_form %}
+<form method="post">
+{% endblock declare_form %}
+    {% csrf_token %}
+    {{ form | materializecss }}
+    <div class="col s12 right-align">
+        <input class="btn waves-effect" type="submit" value="Save" />
+        {% block cancel_button %}
+        <a class="btn tooltipped" data-tooltip="Go back" href="{% url request.resolver_match.app_name|add:':list' %}">Cancel</a>
+        {% endblock cancel_button %}
+    </div>
+</form>
+
+{% endblock content %}
+
+{% block inline_javascript %}
+    <script>
+        $(document).ready(function(){
+            // Initialize materialize form selects
+            $('select').formSelect();
+            $('.tooltipped').tooltip({enterDelay: 0, exitDelay: 0, inDuration: 100, outDuration: 100, margin: 2});
+        });
+    </script>
+{% endblock inline_javascript %}

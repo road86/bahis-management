@@ -1,0 +1,9 @@
+{% extends 'create_form.html' %}
+
+{% block content_title %}
+Update Adminstrative Region
+{% endblock content_title %}
+
+{% block cancel_button %}
+<a class="btn tooltipped" data-tooltip="Go back" href="{% url request.resolver_match.app_name|add:':adminstrative_region_list' %}">Cancel</a>
+{% endblock cancel_button %}
