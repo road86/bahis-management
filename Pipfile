@@ -12,7 +12,7 @@ redis = "==5.0.1"
 hiredis = "==2.3.2"
 uvicorn = {version = "==0.24.0.post1", extras = ["standard"]}
 gunicorn = "==21.2.0"
-psycopg = {version = "==3.1.15", extras = ["c"]}
+psycopg = {version = "==3.2.1", extras = ["c"]}
 django = "~=5.0"
 django-environ = "~=0.1"
 django-model-utils = "==4.3.1"
