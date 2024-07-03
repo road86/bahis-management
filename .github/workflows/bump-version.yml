@@ -21,7 +21,7 @@ jobs:
           skip-version-file: "true"
           output-file: "false"
       - name: release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: ${{ steps.bump.outputs.skipped == 'false' }}
         with:
           tag_name: ${{ steps.bump.outputs.tag }}
