@@ -1,4 +1,4 @@
-FROM python:3.11.7-slim-bookworm
+FROM python:3.11.9-slim-bookworm
 
 ARG BUILD_ENVIRONMENT=dev
 # ARG BUILD_ENVIRONMENT=production
