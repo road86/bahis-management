@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -8,6 +10,7 @@ from django_filters.views import FilterView
 from bahis_management.taxonomies.models import AdministrativeRegion, AdministrativeRegionLevel, Taxonomy
 
 
+@login_required
 def index(request):
     context = {}
     context["taxonomies"] = Taxonomy.objects.all()
@@ -20,14 +23,14 @@ taxonomy_entry_fields = [
 ]
 
 
-class TaxonomyList(ListView):
+class TaxonomyList(LoginRequiredMixin, ListView):
     template_name_suffix = "_list"
     model = Taxonomy
     paginate_by = 5
     ordering = ["title"]
 
 
-class TaxonomyCreate(CreateView):
+class TaxonomyCreate(LoginRequiredMixin, CreateView):
     template_name_suffix = "_create_form"
     model = Taxonomy
     fields = taxonomy_entry_fields
@@ -45,7 +48,7 @@ class TaxonomyCreate(CreateView):
         return super(TaxonomyCreate, self).form_invalid(form)
 
 
-class TaxonomyUpdate(UpdateView):
+class TaxonomyUpdate(LoginRequiredMixin, UpdateView):
     template_name_suffix = "_update_form"
     model = Taxonomy
     fields = taxonomy_entry_fields
@@ -61,7 +64,7 @@ class TaxonomyUpdate(UpdateView):
         return super(TaxonomyUpdate, self).form_invalid(form)
 
 
-class TaxonomyDelete(DeleteView):
+class TaxonomyDelete(LoginRequiredMixin, DeleteView):
     template_name_suffix = "_delete_form"
     model = Taxonomy
     success_url = reverse_lazy("taxonomies:list")
@@ -77,14 +80,14 @@ adminstrative_region_level_entry_fields = [
 ]
 
 
-class AdministrativeRegionLevelList(ListView):
+class AdministrativeRegionLevelList(LoginRequiredMixin, ListView):
     template_name_suffix = "_list"
     model = AdministrativeRegionLevel
     paginate_by = 5
     ordering = ["id"]
 
 
-class AdministrativeRegionLevelCreate(CreateView):
+class AdministrativeRegionLevelCreate(LoginRequiredMixin, CreateView):
     template_name_suffix = "_create_form"
     model = AdministrativeRegionLevel
     fields = adminstrative_region_level_entry_fields
@@ -100,7 +103,7 @@ class AdministrativeRegionLevelCreate(CreateView):
         return super(AdministrativeRegionLevelCreate, self).form_invalid(form)
 
 
-class AdministrativeRegionLevelUpdate(UpdateView):
+class AdministrativeRegionLevelUpdate(LoginRequiredMixin, UpdateView):
     template_name_suffix = "_update_form"
     model = AdministrativeRegionLevel
     fields = adminstrative_region_level_entry_fields
@@ -116,7 +119,7 @@ class AdministrativeRegionLevelUpdate(UpdateView):
         return super(AdministrativeRegionLevelCreate, self).form_invalid(form)
 
 
-class AdministrativeRegionLevelDelete(DeleteView):
+class AdministrativeRegionLevelDelete(LoginRequiredMixin, DeleteView):
     template_name_suffix = "_delete_form"
     model = AdministrativeRegionLevel
     success_url = reverse_lazy("taxonomies:adminstrative_region_level_list")
@@ -134,7 +137,7 @@ adminstrative_region_entry_fields = [
 ]
 
 
-class AdministrativeRegionList(FilterView):
+class AdministrativeRegionList(LoginRequiredMixin, FilterView):
     template_name_suffix = "_list"
     model = AdministrativeRegion
     paginate_by = 15
@@ -161,7 +164,7 @@ class AdministrativeRegionList(FilterView):
         return context
 
 
-class AdministrativeRegionCreate(CreateView):
+class AdministrativeRegionCreate(LoginRequiredMixin, CreateView):
     template_name_suffix = "_create_form"
     model = AdministrativeRegion
     fields = adminstrative_region_entry_fields
@@ -177,7 +180,7 @@ class AdministrativeRegionCreate(CreateView):
         return super(AdministrativeRegionCreate, self).form_invalid(form)
 
 
-class AdministrativeRegionUpdate(UpdateView):
+class AdministrativeRegionUpdate(LoginRequiredMixin, UpdateView):
     template_name_suffix = "_update_form"
     model = AdministrativeRegion
     fields = adminstrative_region_entry_fields
@@ -193,7 +196,7 @@ class AdministrativeRegionUpdate(UpdateView):
         return super(AdministrativeRegionUpdate, self).form_invalid(form)
 
 
-class AdministrativeRegionDelete(DeleteView):
+class AdministrativeRegionDelete(LoginRequiredMixin, DeleteView):
     template_name_suffix = "_delete_form"
     model = AdministrativeRegion
     success_url = reverse_lazy("taxonomies:adminstrative_region_list")

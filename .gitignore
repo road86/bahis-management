@@ -281,3 +281,4 @@ vendors.js
 .env
 .envs/*
 !.envs/.local/
+.idea

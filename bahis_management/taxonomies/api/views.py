@@ -16,7 +16,7 @@ class TaxonomyViewSet(viewsets.ModelViewSet):
     queryset = Taxonomy.objects.all().order_by("slug")
     parser_classes = (parsers.MultiPartParser, parsers.FormParser)
     serializer_class = TaxonomySerializer
-    permission_classes = [permissions.AllowAny]  # [permissions.IsAuthenticated] FIXME auth is turned off
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class AdministrativeRegionLevelViewSet(viewsets.ModelViewSet):
@@ -26,7 +26,7 @@ class AdministrativeRegionLevelViewSet(viewsets.ModelViewSet):
 
     queryset = AdministrativeRegionLevel.objects.all().order_by("id")
     serializer_class = AdministrativeRegionLevelSerializer
-    permission_classes = [permissions.AllowAny]  # [permissions.IsAuthenticated] FIXME auth is turned off
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class AdministrativeRegionViewSet(viewsets.ModelViewSet):
@@ -36,7 +36,7 @@ class AdministrativeRegionViewSet(viewsets.ModelViewSet):
 
     queryset = AdministrativeRegion.objects.all().order_by("id")
     serializer_class = AdministrativeRegionSerializer
-    permission_classes = [permissions.AllowAny]  # [permissions.IsAuthenticated] FIXME auth is turned off
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class AdministrativeRegionCatchmentView(views.APIView):
@@ -46,7 +46,7 @@ class AdministrativeRegionCatchmentView(views.APIView):
     line of parents up to the top level.
     """
 
-    permission_classes = [permissions.AllowAny]  # [permissions.IsAuthenticated] FIXME auth is turned off
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):
         """

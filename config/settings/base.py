@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 APPS_DIR = BASE_DIR / "bahis_management"
 env = environ.Env()
 
-READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
+READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     env.read_env(str(BASE_DIR / ".env"))
@@ -47,13 +47,22 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
+    # "default": {
+    #     "ENGINE": "django.db.backends.postgresql",
+    #     "HOST": env("POSTGRES_HOST"),
+    #     "PORT": env("POSTGRES_PORT"),
+    #     "NAME": env("POSTGRES_DB"),
+    #     "USER": env("POSTGRES_USER"),
+    #     "PASSWORD": env("POSTGRES_PASSWORD"),
+    #     "ATOMIC_REQUESTS": True,
+    # },
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "HOST": env("POSTGRES_HOST"),
-        "PORT": env("POSTGRES_PORT"),
-        "NAME": env("POSTGRES_DB"),
-        "USER": env("POSTGRES_USER"),
-        "PASSWORD": env("POSTGRES_PASSWORD"),
+        "HOST": env("KOBO_HOST"),
+        "PORT": env("KOBO_PORT"),
+        "NAME": env("KPI_DB"),
+        "USER": env("KOBO_USER"),
+        "PASSWORD": env("KOBO_PASSWORD"),
         "ATOMIC_REQUESTS": True,
     }
 }
@@ -73,7 +82,7 @@ DJANGO_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
-    "django.contrib.sites",
+    # "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
@@ -81,6 +90,7 @@ DJANGO_APPS = [
     "django.forms",
 ]
 THIRD_PARTY_APPS = [
+    "oauth2_provider",
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
@@ -90,6 +100,7 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
+    "users",
     "bahis_management.desk",
     "bahis_management.taxonomies",
 ]
@@ -130,8 +141,27 @@ AUTHLIB_OAUTH_CLIENTS = {
         "client_id": env("OAUTH2_CLIENT_ID"),
         "client_secret": env.str("OAUTH2_CLIENT_SECRET"),
         "api_base_url": OAUTH2_API_BASE_URL,
+        "authorization_base_url": OAUTH2_SERVER_URL + "authorize",
+        "token_url": OAUTH2_SERVER_URL + "token/",
+        "user_info_url": OAUTH2_SERVER_URL + "userinfo",
+        "scope": [
+            "profile",
+            "email",
+        ],
     }
 }
+
+OAUTH2_PROVIDER = {
+    "RESOURCE_SERVER_INTROSPECTION_URL": OAUTH2_SERVER_URL + "introspect/",
+    # 'RESOURCE_SERVER_AUTH_TOKEN': 'j6YaTw2hNmPjThNdZwAtZu22p0FAtz',  # OR this but not both:
+    "RESOURCE_SERVER_INTROSPECTION_CREDENTIALS": (env("OAUTH2_CLIENT_ID"), env.str("OAUTH2_CLIENT_SECRET")),
+}
+
+AUTHENTICATION_BACKENDS = [
+    # 'oauth2_provider.backends.OAuth2Backend',
+    # Uncomment following if you want to access the admin
+    "django.contrib.auth.backends.ModelBackend",
+]
 
 # MIDDLEWARE
 # ------------------------------------------------------------------------------
@@ -145,6 +175,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "oauth2_provider.middleware.OAuth2TokenMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -255,11 +286,17 @@ LOGGING = {
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [],  # (
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        # 'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+    ),
+    # (
     #     "rest_framework.authentication.SessionAuthentication",
     #     "rest_framework.authentication.TokenAuthentication",
     # ), FIXME auth is turned off
-    "DEFAULT_PERMISSION_CLASSES": [],  # ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated"),
+    # ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
@@ -277,3 +314,7 @@ SPECTACULAR_SETTINGS = {
     ],  # ["rest_framework.permissions.IsAdminUser"], FIXME auth is turned off
     "SWAGGER_UI_FAVICON_HREF": STATIC_URL + "img/favicon.ico",
 }
+
+LOGIN_URL = "/accounts/login/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
